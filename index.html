@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>张三 | 个人主页</title>
+<meta name="description" content="张三的个人主页 —— 前端工程师，专注于简洁好用的网页产品。">
+<style>
+  /* ---------- 主题变量 ---------- */
+  :root {
+    --bg: #ffffff;
+    --text: #17181c;
+    --muted: #6b7280;
+    --card: #f7f8fa;
+    --border: #e6e8ec;
+    --accent: #2f6bff;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1115;
+    --text: #e8eaed;
+    --muted: #9aa0a6;
+    --card: #171a21;
+    --border: #252932;
+    --accent: #5b8cff;
+  }
+
+  /* ---------- 基础样式 ---------- */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    transition: background .3s ease, color .3s ease;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  ul { list-style: none; }
+
+  .wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---------- 顶部导航 ---------- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    transition: background .3s ease, border-color .3s ease;
+  }
+  @supports (backdrop-filter: blur(1px)) {
+    .nav {
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      backdrop-filter: blur(12px);
+    }
+  }
+  .nav .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -.5px;
+  }
+  .logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+  }
+  .nav-links a {
+    font-size: 14px;
+    color: var(--muted);
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .theme-btn {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    font-size: 15px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform .2s, border-color .2s;
+  }
+  .theme-btn:hover {
+    transform: rotate(-15deg) scale(1.08);
+    border-color: var(--accent);
+  }
+
+  /* ---------- 首屏 ---------- */
+  .hero { padding: 104px 0 80px; }
+
+  .hero .tag {
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: clamp(40px, 8vw, 64px);
+    line-height: 1.1;
+    letter-spacing: -2px;
+    margin: 10px 0 18px;
+  }
+  .hero .sub {
+    font-size: clamp(17px, 2.4vw, 20px);
+    color: var(--text);
+    font-weight: 500;
+  }
+  .hero .desc {
+    max-width: 520px;
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  .btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 34px;
+  }
+  .btn {
+    display: inline-block;
+    padding: 11px 24px;
+    font-size: 15px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    transition: transform .2s, border-color .2s, background .2s;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* ---------- 通用区块 ---------- */
+  .block {
+    padding: 64px 0;
+    border-top: 1px solid var(--border);
+  }
+  .block h2 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 26px;
+  }
+  .block p { color: var(--muted); }
+  .block p strong { color: var(--text); font-weight: 600; }
+
+  /* ---------- 关于 ---------- */
+  .about-text {
+    max-width: 640px;
+    font-size: 16px;
+    display: grid;
+    gap: 14px;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+    margin-top: 30px;
+  }
+  .fact {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .fact .k {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .fact .v {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* ---------- 技能 ---------- */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .tags li {
+    padding: 7px 16px;
+    font-size: 14px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    transition: border-color .2s, color .2s;
+  }
+  .tags li:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ---------- 作品 ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    transition: transform .25s ease, border-color .25s ease;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+  }
+  .card h3 {
+    font-size: 17px;
+    margin-bottom: 8px;
+  }
+  .card p {
+    font-size: 14.5px;
+    line-height: 1.65;
+  }
+  .card .meta {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ---------- 联系 ---------- */
+  .contact-list {
+    display: grid;
+    gap: 12px;
+    max-width: 420px;
+  }
+  .contact-list a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 15px;
+    transition: border-color .2s, transform .2s;
+  }
+  .contact-list a:hover {
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+  .contact-list .arrow { color: var(--accent); }
+
+  /* ---------- 页脚 ---------- */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 30px 0 44px;
+    text-align: center;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+
+  /* ---------- 滚动淡入动画 ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity .65s ease, transform .65s ease;
+  }
+  .reveal.show {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    * { transition: none !important; }
+  }
+
+  /* ---------- 移动端 ---------- */
+  @media (max-width: 640px) {
+    .nav-links { gap: 16px; }
+    .nav-links a { font-size: 13.5px; }
+    .nav-links a:nth-child(3) { display: none; } /* 小屏隐藏"作品"，可从按钮进入 */
+    .hero { padding: 72px 0 60px; }
+    .block { padding: 52px 0; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- 顶部导航 -->
+  <header class="nav">
+    <div class="wrap">
+      <a href="#top" class="logo">张<span>三</span></a>
+      <nav class="nav-links">
+        <a href="#about">关于</a>
+        <a href="#skills">技能</a>
+        <a href="#works">作品</a>
+        <a href="#contact">联系</a>
+        <button class="theme-btn" id="themeBtn" aria-label="切换深浅色主题">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- 首屏 -->
+    <section class="hero wrap" id="top">
+      <p class="tag">你好，我是</p>
+      <h1>张三</h1>
+      <p class="sub">前端工程师 · 交互设计爱好者</p>
+      <p class="desc">专注于用简洁的代码，构建清晰、好用、加载快速的网页产品。</p>
+      <div class="btns">
+        <a href="#works" class="btn primary">查看作品</a>
+        <a href="#contact" class="btn">联系我</a>
+      </div>
+    </section>
+
+    <!-- 关于 -->
+    <section class="block wrap reveal" id="about">
+      <h2>关于我</h2>
+      <div class="about-text">
+        <p><strong>5 年</strong>前端开发经验，做过企业官网、数据看板与移动端 H5。</p>
+        <p>信奉「少即是多」：先让内容清晰，再让细节动人。喜欢把复杂需求拆成简单模块。</p>
+        <p>业余时间写开源、拍照片、跑步。</p>
+      </div>
+      <div class="facts">
+        <div class="fact"><div class="k">所在地</div><div class="v">中国 · 杭州</div></div>
+        <div class="fact"><div class="k">方向</div><div class="v">Web 前端 / UI 实现</div></div>
+        <div class="fact"><div class="k">状态</div><div class="v">可接受合作</div></div>
+      </div>
+    </section>
+
+    <!-- 技能 -->
+    <section class="block wrap reveal" id="skills">
+      <h2>技能栈</h2>
+      <ul class="tags">
+        <li>HTML5</li>
+        <li>CSS3</li>
+        <li>JavaScript (ES6+)</li>
+        <li>TypeScript</li>
+        <li>Vue 3</li>
+        <li>React</li>
+        <li>Node.js</li>
+        <li>Vite</li>
+        <li>Git</li>
+        <li>Figma</li>
+        <li>响应式布局</li>
+        <li>性能优化</li>
+      </ul>
+    </section>
+
+    <!-- 作品 -->
+    <section class="block wrap reveal" id="works">
+      <h2>精选作品</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>数据看板系统</h3>
+          <p>面向运营的实时数据看板，支持自定义图表与多维度筛选。</p>
+          <div class="meta">Vue 3 · ECharts · WebSocket</div>
+        </article>
+        <article class="card">
+          <h3>移动端商城 H5</h3>
+          <p>轻量电商页面，首屏加载 1.2s 内，转化率提升 18%。</p>
+          <div class="meta">React · Vite · 懒加载</div>
+        </article>
+        <article class="card">
+          <h3>开源组件库</h3>
+          <p>一套零依赖的轻量 UI 组件，体积 12KB，GitHub 300+ star。</p>
+          <div class="meta">TypeScript · Rollup</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 联系 -->
+    <section class="block wrap reveal" id="contact">
+      <h2>联系我</h2>
+      <div class="contact-list">
+        <a href="mailto:hello@example.com">
+          <span>邮箱 · hello@example.com</span><span class="arrow">↗</span>
+        </a>
+        <a href="https://github.com/" target="_blank" rel="noopener">
+          <span>GitHub · @zhangsan</span><span class="arrow">↗</span>
+        </a>
+        <a href="#top">
+          <span>回到顶部</span><span class="arrow">↑</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">© 2026 张三 · 用 HTML / CSS / JavaScript 手写</div>
+  </footer>
+
+<script>
+  /* ---------- 1. 主题切换（记忆用户选择） ---------- */
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('themeBtn');
+
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    root.dataset.theme = savedTheme;
+  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    root.dataset.theme = 'dark';
+  }
+
+  function syncThemeIcon() {
+    themeBtn.textContent = root.dataset.theme === 'dark' ? '☀️' : '🌙';
+  }
+  syncThemeIcon();
+
+  themeBtn.addEventListener('click', () => {
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('theme', root.dataset.theme);
+    syncThemeIcon();
+  });
+
+  /* ---------- 2. 滚动进入视口时淡入 ---------- */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+  /* ---------- 3. 导航栏滚动加阴影 ---------- */
+  const nav = document.querySelector('.nav');
+  window.addEventListener('scroll', () => {
+    nav.style.boxShadow = window.scrollY > 10
+      ? '0 6px 24px rgba(0,0,0,.06)'
+      : 'none';
+  }, { passive: true });
+</script>
+</body>
+</html>
